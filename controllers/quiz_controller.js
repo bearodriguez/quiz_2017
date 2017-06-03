@@ -3,6 +3,7 @@ var Sequelize = require('sequelize');
 
 var paginate = require('../helpers/paginate').paginate;
 
+var score = 0;
 // Autoload el quiz asociado a :quizId
 exports.load = function (req, res, next, quizId) {
 
@@ -24,7 +25,15 @@ exports.load = function (req, res, next, quizId) {
 // GET /quizzes
 exports.index = function (req, res, next) {
 
-    var countOptions = {};
+    models.Quiz.findAll()
+    .then(function(quizzes){
+        res.render('quizzes/index.ejs', {quizzes: quizzes});
+    })
+    .catch(function(error){
+        next(error);
+    });
+
+    /*var countOptions = {};
 
     // Busquedas:
     var search = req.query.search || '';
@@ -63,9 +72,19 @@ exports.index = function (req, res, next) {
     })
     .catch(function (error) {
         next(error);
-    });
+    });*/
 };
 
+
+// GET random_play
+exports.random = function (req, res, next){
+var quizId=Number(req.params.quizId);
+    res.render('quizzes/random_play.ejs', { 
+        quiz: quizId,
+        score : score
+
+    });
+};
 
 // GET /quizzes/:quizId
 exports.show = function (req, res, next) {
@@ -97,6 +116,8 @@ exports.create = function (req, res, next) {
         req.flash('success', 'Quiz creado con éxito.');
         res.redirect('/quizzes/' + quiz.id);
     })
+    //Si algun cajetin está vacío y se pulsa salvar se genera error de validación 
+    //y se llama a la función de atención al error
     .catch(Sequelize.ValidationError, function (error) {
 
         req.flash('error', 'Errores en el formulario:');
@@ -123,27 +144,36 @@ exports.edit = function (req, res, next) {
 // PUT /quizzes/:quizId
 exports.update = function (req, res, next) {
 
+    //guarda en req.quiz los parametros question y answer enviados 
+    //desde el formulario edit desde el cliente
     req.quiz.question = req.body.question;
     req.quiz.answer = req.body.answer;
 
+    //guarda los campos question y answer en la tabla Quiz
     req.quiz.save({fields: ["question", "answer"]})
     .then(function (quiz) {
         req.flash('success', 'Quiz editado con éxito.');
         res.redirect('/quizzes/' + req.quiz.id);
     })
+    //Si algun cajetin está vacío y se pulsa salvar se genera error de validación 
+    //y se llama a la función de atención al error
     .catch(Sequelize.ValidationError, function (error) {
 
         req.flash('error', 'Errores en el formulario:');
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
         }
-
+        // una vez actualizado se redirige a /quizzes/quizId
         res.render('quizzes/edit', {quiz: req.quiz});
     })
     .catch(function (error) {
-        req.flash('error', 'Error al editar el Quiz: ' + error.message);
+       // req.flash('error', 'Error al editar el Quiz: ' + error.message);
         next(error);
     });
+
+    models.Quiz.update(req.quiz);
+
+    res.redirect('/quizzes/' + req.quiz.id);
 };
 
 
@@ -180,6 +210,10 @@ exports.check = function (req, res, next) {
     var answer = req.query.answer || "";
 
     var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+
+    if (result){
+        score++;
+    }
 
     res.render('quizzes/result', {
         quiz: req.quiz,
