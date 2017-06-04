@@ -247,6 +247,7 @@ exports.randomcheck = function (req, res, next) {
     }
     if(!result){
     	n=0;
+    	req.session.score = 0;
     }
 
     res.render('quizzes/random_result', {
