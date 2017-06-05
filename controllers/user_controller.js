@@ -45,10 +45,13 @@ exports.index = function (req, res, next) {
             order: ['username']
         };
 
+        findOptions.include = [{model: models.User, as: 'Author'}];
+
         return models.User.findAll(findOptions);
     })
     .then(function (users) {
-        res.render('users/index', {users: users});
+        res.render('users/index', {users: users
+        });
     })
     .catch(function (error) {
         next(error);

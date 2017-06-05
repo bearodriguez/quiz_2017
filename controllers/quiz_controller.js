@@ -10,8 +10,9 @@ exports.load = function (req, res, next, quizId) {
 
     models.Quiz.findById(quizId, {
         include: [
-            models.Tip,
-            {model: models.User, as: 'Author'}
+        {model: models.Tip,  include: [{model: models.User, as: 'Author'}]},
+            //models.Tip, // para que aparezca en quiz.Tips el array de tips asociados al quiz.
+        {model: models.User, as: 'Author'}
         ]
     })
     .then(function (quiz) {
@@ -46,23 +47,11 @@ exports.adminOrAuthorRequired = function(req, res, next){
 // GET /quizzes
 exports.index = function (req, res, next) {
 
-<<<<<<< HEAD
     var countOptions = {
         where: {}
     };
 
     var title = "Preguntas";
-=======
-    models.Quiz.findAll()
-    .then(function(quizzes){
-        res.render('quizzes/index.ejs', {quizzes: quizzes});
-    })
-    .catch(function(error){
-        next(error);
-    });
-
-    var countOptions = {};
->>>>>>> practica52
 
     // Busquedas:
     var search = req.query.search || '';
@@ -77,6 +66,16 @@ exports.index = function (req, res, next) {
         countOptions.where.AuthorId = req.user.id;
         title = "Preguntas de " + req.user.username;
     }
+
+     models.Quiz.findAll()
+    .then(function(quizzes){
+        res.render('quizzes/index.ejs', {quizzes: quizzes});
+    })
+    .catch(function(error){
+        next(error);
+    });
+
+    var countOptions = {};
 
     models.Quiz.count(countOptions)
     .then(function (count) {
@@ -104,7 +103,8 @@ exports.index = function (req, res, next) {
         res.render('quizzes/index.ejs', {
             quizzes: quizzes,
             search: search,
-            title: title
+            title: title,
+            author: bea
         });
     })
     .catch(function (error) {

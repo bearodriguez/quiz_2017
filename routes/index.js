@@ -65,29 +65,13 @@ router.delete('/session', sessionController.destroy); // destruir sesión
 
 
 // Definición de rutas de cuenta
-router.get('/users',
-    sessionController.loginRequired,
-    userController.index);   // listado usuarios
-router.get('/users/:userId(\\d+)',
-    sessionController.loginRequired,
-    userController.show);    // ver un usuario
-router.get('/users/new',
-    userController.new);     // formulario sign un
-router.post('/users',
-    userController.create);  // registrar usuario
-router.get('/users/:userId(\\d+)/edit',
-    sessionController.loginRequired,
-    sessionController.adminOrMyselfRequired,
-    userController.edit);     // editar información de cuenta
-router.put('/users/:userId(\\d+)',
-    sessionController.loginRequired,
-    sessionController.adminOrMyselfRequired,
-    userController.update);   // actualizar información de cuenta
-router.delete('/users/:userId(\\d+)',
-    sessionController.loginRequired,
-    sessionController.adminOrMyselfRequired,
-    userController.destroy);  // borrar cuenta
-
+router.get('/users', sessionController.loginRequired, userController.index);   // listado usuarios
+router.get('/users/:userId(\\d+)', sessionController.loginRequired, userController.show);    // ver un usuario
+router.get('/users/new', userController.new);     // formulario sign un
+router.post('/users', userController.create);  // registrar usuario
+router.get('/users/:userId(\\d+)/edit', sessionController.loginRequired, sessionController.adminOrMyselfRequired, userController.edit);     // editar información de cuenta
+router.put('/users/:userId(\\d+)', sessionController.loginRequired, sessionController.adminOrMyselfRequired, userController.update);   // actualizar información de cuenta
+router.delete('/users/:userId(\\d+)', sessionController.loginRequired, sessionController.adminOrMyselfRequired, userController.destroy);  // borrar cuenta
 router.get('/users/:userId(\\d+)/quizzes', quizController.index);     // ver las preguntas de un usuario
 
 

@@ -5,7 +5,14 @@ var Sequelize = require('sequelize');
 // Autoload la pista asociado a :tipId
 exports.load = function (req, res, next, tipId) {
 
-    models.Tip.findById(tipId)
+findOptions.include = [{model: models.User, as: 'Author'}];
+   
+    models.Tip.findById(tipId, {
+        include: [
+            models.Tip,
+            {model: models.User, as: 'Author'}
+        ]
+    })
     .then(function (tip) {
         if (tip) {
             req.tip = tip;
