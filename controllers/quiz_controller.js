@@ -9,9 +9,8 @@ var n = 0;
 exports.load = function (req, res, next, quizId) {
 
     models.Quiz.findById(quizId, {
-        include: [
-            models.Tip,
-            {model: models.User, as: 'Author'}
+        include: [{model: models.Tip, include: [{model: models.User, as: 'Author'}]},
+                 {model: models.User, as: 'Author'}
         ]
     })
     .then(function (quiz) {
@@ -46,8 +45,8 @@ exports.adminOrAuthorRequired = function(req, res, next){
 // GET /quizzes
 exports.index = function (req, res, next) {
 
-    var countOptions = {
-        where: {}
+    var countOptions = { // Las opciones de búsqueda de la BBDD se inicializan como vacías
+        where: {}        // para poderlas configurar para ambas búsquedas (todos o solo los del usuario)
     };
 
     var title = "Preguntas";
@@ -60,7 +59,7 @@ exports.index = function (req, res, next) {
         countOptions.where.question = { $like: search_like };
     }
 
-    // Si existe req.user, mostrar solo sus preguntas.
+    // Si existe req.user, mostrar solo sus preguntas. Pone nombre de usuario como titulo
     if (req.user) {
         countOptions.where.AuthorId = req.user.id;
         title = "Preguntas de " + req.user.username;
@@ -243,7 +242,7 @@ exports.play = function (req, res, next) {
 
     res.render('quizzes/play', {
         quiz: req.quiz,
-        answer: answer
+        answer: answer,
     });
 };
 
