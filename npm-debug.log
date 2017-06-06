@@ -1,19 +1,24 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'run-script',
+1 verbose cli   'migrate_heroku',
+1 verbose cli   'quiz2017bp53' ]
 2 info using npm@3.10.10
 3 info using node@v6.10.0
-4 verbose run-script [ 'prestart', 'start', 'poststart' ]
-5 info lifecycle quiz-2017@0.0.0~prestart: quiz-2017@0.0.0
-6 silly lifecycle quiz-2017@0.0.0~prestart: no script for prestart, continuing
-7 info lifecycle quiz-2017@0.0.0~start: quiz-2017@0.0.0
-8 verbose lifecycle quiz-2017@0.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle quiz-2017@0.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/BeaRodriguez/quiz_2017/node_modules/.bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-10 verbose lifecycle quiz-2017@0.0.0~start: CWD: /Users/BeaRodriguez/quiz_2017
-11 silly lifecycle quiz-2017@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
-12 silly lifecycle quiz-2017@0.0.0~start: Returned: code: 1  signal: null
-13 info lifecycle quiz-2017@0.0.0~start: Failed to exec start script
-14 verbose stack Error: quiz-2017@0.0.0 start: `node ./bin/www`
-14 verbose stack Exit status 1
+4 verbose run-script [ 'premigrate_heroku', 'migrate_heroku', 'postmigrate_heroku' ]
+5 info lifecycle quiz-2017@0.0.0~premigrate_heroku: quiz-2017@0.0.0
+6 silly lifecycle quiz-2017@0.0.0~premigrate_heroku: no script for premigrate_heroku, continuing
+7 info lifecycle quiz-2017@0.0.0~migrate_heroku: quiz-2017@0.0.0
+8 verbose lifecycle quiz-2017@0.0.0~migrate_heroku: unsafe-perm in lifecycle true
+9 verbose lifecycle quiz-2017@0.0.0~migrate_heroku: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/BeaRodriguez/quiz_2017/node_modules/.bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+10 verbose lifecycle quiz-2017@0.0.0~migrate_heroku: CWD: /Users/BeaRodriguez/quiz_2017
+11 silly lifecycle quiz-2017@0.0.0~migrate_heroku: Args: [ '-c',
+11 silly lifecycle   'heroku run ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL "quiz2017bp53"' ]
+12 silly lifecycle quiz-2017@0.0.0~migrate_heroku: Returned: code: 2  signal: null
+13 info lifecycle quiz-2017@0.0.0~migrate_heroku: Failed to exec migrate_heroku script
+14 verbose stack Error: quiz-2017@0.0.0 migrate_heroku: `heroku run ./node_modules/.bin/sequelize db:migrate --url \$DATABASE_URL "quiz2017bp53"`
+14 verbose stack Exit status 2
 14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:255:16)
 14 verbose stack     at emitTwo (events.js:106:13)
 14 verbose stack     at EventEmitter.emit (events.js:191:7)
@@ -25,18 +30,18 @@
 15 verbose pkgid quiz-2017@0.0.0
 16 verbose cwd /Users/BeaRodriguez/quiz_2017
 17 error Darwin 15.3.0
-18 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
+18 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "run-script" "migrate_heroku" "quiz2017bp53"
 19 error node v6.10.0
 20 error npm  v3.10.10
 21 error code ELIFECYCLE
-22 error quiz-2017@0.0.0 start: `node ./bin/www`
-22 error Exit status 1
-23 error Failed at the quiz-2017@0.0.0 start script 'node ./bin/www'.
+22 error quiz-2017@0.0.0 migrate_heroku: `heroku run ./node_modules/.bin/sequelize db:migrate --url \$DATABASE_URL "quiz2017bp53"`
+22 error Exit status 2
+23 error Failed at the quiz-2017@0.0.0 migrate_heroku script 'heroku run ./node_modules/.bin/sequelize db:migrate --url \$DATABASE_URL "quiz2017bp53"'.
 23 error Make sure you have the latest version of node.js and npm installed.
 23 error If you do, this is most likely a problem with the quiz-2017 package,
 23 error not with npm itself.
 23 error Tell the author that this fails on your system:
-23 error     node ./bin/www
+23 error     heroku run ./node_modules/.bin/sequelize db:migrate --url \$DATABASE_URL "quiz2017bp53"
 23 error You can get information on how to open an issue for this project with:
 23 error     npm bugs quiz-2017
 23 error Or if that isn't available, you can get their info via:

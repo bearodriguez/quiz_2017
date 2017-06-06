@@ -41,6 +41,19 @@ exports.adminOrAuthorRequired = function(req, res, next){
     }
 };
 
+// MW que permite acciones solamente si al usuario logeado es admin o es el autor del tip.
+exports.adminOrTipAuthorRequired = function(req, res, next){
+
+    var isAdmin  = req.session.user.isAdmin;
+    var isTipAuthor = req.tip.AuthorId === req.session.user.id;
+
+    if (isAdmin || isTipAuthor) {
+        next();
+    } else {
+        console.log('Operación prohibida: El usuario logeado no es el autor del tip, ni un administrador.');
+        res.send(403);
+    }
+};
 
 // GET /quizzes
 exports.index = function (req, res, next) {
